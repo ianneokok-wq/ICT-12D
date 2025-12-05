@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Memories of ICT 12-D</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Great+Vibes&display=swap');
+
+    :root{
+      --violet: #7d5fff;
+      --gold: #d4a90a;
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --radius: 16px;
+      --shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    body{
+      margin:0;
+      background: linear-gradient(135deg, #000000, #2e004f, #6b00b3);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      padding:20px;
+      color:#fff;
+      font-family:'Poppins', sans-serif;
+    }
+
+    .photo-card{
+      max-width:850px;
+      width:100%;
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      border: 2px solid rgba(212,169,10,0.3);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 1.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0; transform:scale(0.95);}
+      to {opacity:1; transform:scale(1);}
+    }
+
+    .photo-card img{
+      display:block;
+      width:100%;
+      height:auto;
+      object-fit:cover;
+      border-bottom:3px solid var(--gold);
+      filter:brightness(0.9);
+    }
+
+    .photo-caption{
+      padding:24px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(50,0,90,0.6));
+      text-align:center;
+    }
+
+    .photo-caption h2{
+      margin:0 0 12px 0;
+      font-size:34px;
+      color:var(--gold);
+      font-family:'Great Vibes', cursive;
+      letter-spacing:1px;
+      text-shadow: 0 0 10px rgba(212,169,10,0.7);
+    }
+
+    .photo-caption p{
+      margin:0;
+      color:#e5dbff;
+      font-size:18px;
+      line-height:1.6;
+      font-weight:500;
+    }
+
+    .gold-underline{
+      height:4px;
+      width:90px;
+      background:linear-gradient(90deg,var(--gold),#ffecb3);
+      border-radius:6px;
+      margin:18px auto 0 auto;
+      box-shadow:0 0 8px rgba(212,169,10,0.7);
+    }
+
+    .btn-unique{
+      margin-top:20px;
+      background:linear-gradient(135deg,var(--gold),#c79c15);
+      color:#1f0033;
+      padding:14px 28px;
+      border:none;
+      border-radius:40px;
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 0 15px rgba(212,169,10,0.6);
+      transition: all 0.3s ease;
+    }
+
+    .btn-unique:hover{
+      transform:scale(1.07);
+      box-shadow:0 0 25px rgba(212,169,10,0.9);
+      background:linear-gradient(135deg,#ffdc73,var(--gold));
+    }
+  </style>
+</head>
+<body>
+
+  <div class="photo-card">
+    <img src="lol.jpeg" alt="Memories of ICT 12-D"> 
+    <div class="photo-caption">
+      <h2>Memories of ICT 12-D</h2>
+      <p>Hi guys!! I made this website for our memories, I'll make it memorable and enjoyable. The time is so fast — we are going to be in college now and we will be separated. I LOVE YOU GUYSS!! I made this for all of you guys!!</p>
+      <div class="gold-underline"></div>
+      <a class="btn-unique" href="sure.html">View Our Memory</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Our Class - ICT 12-D</title>
+  <style>
+    :root{
+      --bg1:#ee9ca7;
+      --bg2:#ffdde1;
+      --card-bg: rgba(255,255,255,0.15);
+      --glass: rgba(255,255,255,0.08);
+      --accent1: #ff6f91;
+      --accent2: #ffb6c1;
+    }
+    body{
+      margin:0;
+      font-family:'Poppins',sans-serif;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:30px;
+      color:#fff;
+    }
+    h1{
+      text-align:center;
+      font-size:36px;
+      color:#fff;
+      margin-bottom:40px;
+      text-shadow:0 3px 10px rgba(0,0,0,0.3);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:25px;
+      width:100%;
+      max-width:1100px;
+    }
+    .person{
+      background:var(--card-bg);
+      border-radius:20px;
+      padding:12px;
+      text-align:center;
+      transition:transform .28s ease,box-shadow .28s ease;
+      cursor:pointer;
+      outline: none;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .person:focus, .person:hover{
+      transform:scale(1.04);
+      box-shadow:0 12px 30px rgba(0,0,0,0.25);
+    }
+    .person img{
+      width:100%;
+      height:160px;
+      object-fit:cover;
+      border-radius:12px;
+      margin-bottom:10px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.3);
+    }
+    .name{
+      font-weight:700;
+      color:#fff;
+      font-size:15px;
+      text-transform:capitalize;
+      margin:0;
+      user-select:none;
+    }
+
+    /* Modal */
+  /* --- Modal Styling --- */
+/* --- Black + Violet + Gold Modal Theme --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.modal-backdrop.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { backdrop-filter: blur(0px); opacity: 0; }
+  to { backdrop-filter: blur(6px); opacity: 1; }
+}
+
+.modal {
+  width: 100%;
+  max-width: 760px;
+  background: linear-gradient(145deg, rgba(25, 0, 40, 0.95), rgba(5, 0, 15, 0.9));
+  border-radius: 20px;
+  padding: 25px;
+  color: #f5f5f5;
+  box-shadow: 0 0 25px rgba(162, 103, 255, 0.35);
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+  animation: popIn 0.6s ease forwards;
+}
+
+.modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, #FFD700, #D4AF37, #B8860B, #FFD700);
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: goldGlow 6s ease infinite;
+}
+
+@keyframes goldGlow {
+  0% { background-position: 0% 50%; filter: brightness(1); }
+  50% { background-position: 100% 50%; filter: brightness(1.3); }
+  100% { background-position: 0% 50%; filter: brightness(1); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.modal .photo {
+  flex: 0 0 260px;
+  height: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(162, 103, 255, 0.5);
+  position: relative;
+}
+
+.modal .photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modal .photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,1), rgba(162,103,255,0.15));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.modal .photo:hover::after { opacity: 1; }
+
+.modal .meta {
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.modal .meta h2{
+  margin:0;
+  font-size:22px;
+  letter-spacing:0.3px;
+  color:green;
+}
+
+.modal .meta p.role{
+  margin:0;
+  font-weight:600;
+  color:white;
+}
+
+.modal .meta p.message{
+  margin-top:10px;
+  line-height:1.45;
+  opacity:0.95;
+  color:#eaeaea;
+}
+
+.modal .meta .meta-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:6px;
+  font-size:13px;
+  color:#cfa7ff;
+  opacity:0.95;
+}
+
+/* Gold Close Button */
+.close-btn {
+  margin-top:auto;
+  align-self:flex-end;
+  padding:10px 18px;
+  border-radius:15px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(90deg,#FFD700,#DAA520);
+  color:black;
+  font-weight:700;
+  box-shadow:0 6px 20px rgba(255,215,0,0.4);
+  transition:all 0.3s ease;
+  z-index:10;
+  pointer-events:all;
+}
+
+.close-btn:hover {
+  transform:scale(1.08);
+  box-shadow:0 10px 25px rgba(255,215,0,0.6);
+  background:linear-gradient(90deg,#FFC000,#FFD700);
+}
+
+
+/* Responsive */
+@media (max-width:720px){
+  .modal{ flex-direction:column; align-items:center; }
+  .modal .photo{ width:100%; height:220px; }
+  .modal .meta{ width:100%; }
+  .person img{ height:140px; }
+}
+
+.back-btn{
+  margin-top:40px;
+  padding:12px 28px;
+  border:none;
+  border-radius:25px;
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  color:white;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 5px 15px rgba(255,111,145,0.4);
+  transition:all .3s ease;
+}
+.back-btn:hover{
+  transform:scale(1.06);
+  box-shadow:0 10px 25px rgba(255,111,145,0.6);
+}
+
+  </style>
+</head>
+<body>
+  <h1>👨‍🏫 ICT 12-D Family</h1>
+
+  <div class="grid" id="classGrid" aria-live="polite"></div>
+
+  <button class="back-btn" onclick="window.location.href='sure.html'">⬅ Back to Home</button>
+
+  <!-- Modal markup -->
+  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-hidden="true" aria-labelledby="modalName">
+    <div class="modal" role="document">
+      <div class="photo" id="modalPhoto"><img src="" alt=""></div>
+      <div class="meta">
+        <h2 id="modalName">Full Name</h2>
+        <p class="role" id="modalRole">Student / Adviser</p>
+        <div class="meta-row" id="modalExtra">
+          <!-- e.g. year, nickname, etc -->
+        </div>
+        <p class="message" id="modalMessage">This is a sample message/description. Replace it with the person's real message or quote.</p>
+        <button class="close-btn" id="modalClose">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Person data: update this with real full names/messages as needed ---
+    const people = [
+      // Format: { file: "filename.jpg", name: "Full Name", role: "Role or nickname", extra: ["Adviser", "Batch 2025"], message: "Short message / quote" }
+      { file: "adviser.jpg", name: "Sr. Mc Ron Dacusin", role: "Adviser", extra: ["ICT Teacher", "Adviser"], message: "Proud of you all — keep learning and be kind." },
+      { file: "teodorico.png", name: "Teodorico, Joseph", role: "Class President", extra: ["....."], message: "Our performance at the Sportsfest — unforgettable!" },
+      { file: "Viray.jpeg", name: "~ Viray, Sharol Marcuz A.", role: "Clas Singer", extra: ["Cute"], message: "~Kung kupal ka, ganun talaga" },
+      { file: "kelvin.png", name: "Marmol, Mark Kelvin B.", role: "Kupal1", extra: ["babaero", "Malibog"], message: "Kunting bato, Kunting semento, Monumento." },
+      { file: "krysthal.png", name: "Fronda, Krysthal S.", role: "Ganda", extra: ["babaero", "Malibog"], message: "Walang moto kasi kupal" },
+      { file: "lester.png", name: "De Leon, John Lester P.", role: "Kupal2", extra: ["babaero", "Malibog"], message: "Don't judge a bra by it's cover, Put your hands inside and discover" },
+      { file: "aj.png", name: "Esquillo, Juan Antonio B. ", role: "Kupal3", extra: ["babaero", "Malibog"], message: "Ang motto ko ay masubo nya to!" },
+      { file: "vistal.png", name: "Vistal, Justine  ", role: "Kupal3", extra: ["babaero", "Malibog"], message: "Kung ang kape ay matapang, Mas masarap ako!" },
+      { file: "justine.png", name: "Soguilon, Justin Rain ", role: "Kupal3", extra: ["babaero", "Malibog"], message: "Jabolll everyday!!" },
+      { file: "lyle.png", name: "Ababat, Lyle Quirzten ", role: "Kupal3", extra: ["babaero", "Malibog"], message: "Ang motto ko ay sana manalo sa lotto" },
+       { file: "gaco.png", name: "Gaco, John Mark ", role: "....", extra: ["....", "......"], message: "mahal kita maging sino ka ba" },
+       { file: "jana.png", name: "Bunga, Princess Jana ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+       { file: "semana.png", name: "Semana, Mark Joseph ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+       { file: "yeo.png", name: "Yeo, Danielle ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+       { file: "romano.png", name: "Romano, Princess ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+        { file: "pacayra.png", name: "Pacayra, Princess ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+       { file: "franco.png", name: "Franco, Frix B. ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+      { file: "bunga.png", name: "Bunga, John Ronel ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+      { file: "tolentino.png", name: "Tolentino, Rainell Christian ", role: "....", extra: ["....", "......"], message: "Mataas tumalon, Malalim bumaon" },
+      { file: "amante.png", name: "Amante, Romemark ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+      { file: "tikistikis.png", name: "Tikistikis, Jeffe ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+      { file: "genavia.png", name: "Genavia, Keyzeal ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+      { file: "secretario.png", name: "Secretario, Julius ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+      { file: "lazam.png", name: "Lazam, Rhodney ", role: "....", extra: ["....", "......"], message: "Let Go, Let God" },
+      { file: "valdemoro.png", name: "Valdemoro, Zaido ", role: "....", extra: ["....", "......"], message: "Walang imposible, Basta hindi ako gagawa" },
+      { file: "fernandez.png", name: "Fernandez, Jheel ", role: "....", extra: ["....", "......"], message: "Walang imposible, Basta hindi ako gagawa" },
+      { file: "timbal.png", name: "Timbal, Fernel Lexter F. ", role: "....", extra: ["....", "......"], message: "Walang imposible, Basta hindi ako gagawa" },
+      // ... add more entries here for all filenames you included earlier
+      // If you only have filenames and want to auto-generate names, you can omit objects and we will fallback to filename-derived names.
+    ];
+
+    // Fallback list of filenames (from your original file) — automatically used if a person is missing from 'people'
+    const filenames = [
+      "adviser.jpg","teodorico.png","Viray.jpeg","kelvin.png","lester.png","aj.png",
+      "vistal.png","justine.png","lyle.png","gaco.png","jana.png","semana.png","yeo.png","romano.png",
+      "pacayra.png","franco.png","bunga.png","tolentino.png","amante.png","tikistikis.png","genavia.png","secretario.png",
+      "lazam.png","valdemoro.png","fernandez.png","timbal.png","ethan.jpg","lance.jpg","alyssa.jpg","denise.jpg",
+      "miguel.jpg","elijah.jpg","tiffany.jpg","leo.jpg","raven.jpg","trisha.jpg","nathan.jpg","bea.jpg",
+      "charles.jpg","diana.jpg"
+    ];
+
+    const grid = document.getElementById('classGrid');
+
+    function humanNameFromFile(filename){
+      return filename
+        .split('.')[0]
+        .replace(/[-_]/g,' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    // Build a quick lookup by filename for people array
+    const peopleByFile = {};
+    people.forEach(p => { peopleByFile[p.file] = p; });
+
+    // Create cards — use people info if present, otherwise fallback to deriving from filename
+    const allFiles = Array.from(new Set([...people.map(p => p.file), ...filenames]));
+    allFiles.forEach(filename => {
+      const data = peopleByFile[filename] || { file: filename, name: humanNameFromFile(filename), role: "Student", extra: [], message: "No message yet — add one in the code." };
+
+      const div = document.createElement('button'); // use button for accessibility
+      div.className = 'person';
+      div.type = 'button';
+      div.setAttribute('aria-label', `Open profile of ${data.name}`);
+      div.innerHTML = `
+        <img src="${data.file}" alt="${data.name}">
+        <p class="name">${data.name}</p>
+      `;
+      // When clicked -> open modal with the full info
+      div.addEventListener('click', () => openModal(data));
+      // keyboard: Enter/Space will trigger button automatically
+      grid.appendChild(div);
+    });
+
+    // Modal elements
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalPhoto = document.getElementById('modalPhoto').querySelector('img');
+    const modalName = document.getElementById('modalName');
+    const modalRole = document.getElementById('modalRole');
+    const modalExtra = document.getElementById('modalExtra');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalClose = document.getElementById('modalClose');
+
+    // Open modal and fill data
+    function openModal(data){
+      modalPhoto.src = data.file;
+      modalPhoto.alt = data.name;
+      modalName.textContent = data.name;
+      modalRole.textContent = data.role || '';
+      // extras
+      modalExtra.innerHTML = '';
+      if(Array.isArray(data.extra) && data.extra.length){
+        data.extra.forEach(x => {
+          const span = document.createElement('span');
+          span.textContent = x;
+          modalExtra.appendChild(span);
+        });
+      }
+      modalMessage.textContent = data.message || '';
+      modalBackdrop.classList.add('show');
+      modalBackdrop.setAttribute('aria-hidden', 'false');
+      lastFocused = document.activeElement;
+      modalClose.focus();
+    }
+
+    // Close modal
+    function closeModal(){
+      modalBackdrop.classList.remove('show');
+      modalBackdrop.setAttribute('aria-hidden', 'true');
+      modalPhoto.src = '';
+      if(lastFocused) lastFocused.focus();
+    }
+
+    modalClose.addEventListener('click', closeModal);
+
+    // Click outside modal content closes it
+    modalBackdrop.addEventListener('click', (e) => {
+      if(e.target === modalBackdrop) closeModal();
+    });
+
+    // Close on Esc
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modalBackdrop.classList.contains('show')) closeModal();
+    });
+
+    // maintain last focused element for returning focus after closing modal
+    let lastFocused = null;
+
+    // Accessibility: trap tab inside modal when open (simple trap)
+    document.addEventListener('keydown', (e) => {
+      if(!modalBackdrop.classList.contains('show')) return;
+      if(e.key !== 'Tab') return;
+      const focusable = modalBackdrop.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const focusableArr = Array.prototype.slice.call(focusable);
+      if(focusableArr.length === 0) return;
+      const first = focusableArr[0];
+      const last = focusableArr[focusableArr.length - 1];
+      if(e.shiftKey){
+        if(document.activeElement === first){ last.focus(); e.preventDefault(); }
+      } else {
+        if(document.activeElement === last){ first.focus(); e.preventDefault(); }
+      }
+    });
+
+    // --- Notes for you ---
+    // • To change a person's message or full name, edit the 'people' array above.
+    // • Add or replace image files in the same folder as this HTML (use the filename in 'file').
+    // • If you want to auto-generate everyone from filenames only, clear the 'people' array.
+  </script>
+</body>
+</html>
