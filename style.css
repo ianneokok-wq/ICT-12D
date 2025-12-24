@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* PASSWORD SCREEN */
+.password-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, pink, hotpink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.password-screen input {
+  padding: 12px;
+  width: 220px;
+  margin-top: 10px;
+  border-radius: 20px;
+  border: none;
+}
+
+.password-screen button {
+  margin-top: 10px;
+  padding: 10px 25px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#errorText {
+  color: red;
+  margin-top: 8px;
+}
+
+/* WELCOME SCREEN */
+.welcome-screen {
+  position: fixed;
+  inset: 0;
+  background: #ff69b4;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 40px;
+  animation: fadeIn 1s ease;
+  z-index: 10;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+/* GALLERY */
+.gallery {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.photo-item img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+.photo-item p {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* IMAGE POPUP */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}

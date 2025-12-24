@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ICT 12-D</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+    }
+    #passwordScreen {
+      background: #ff97b9;
+      z-index: 3;
+    }
+    #passwordScreen input {
+      padding: 10px;
+      width: 220px;
+      border-radius: 15px;
+      border: none;
+      margin-top: 12px;
+    }
+    #passwordScreen button {
+      margin-top: 12px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    #errorText { color: red; margin-top: 8px; }
+    #welcomeScreen {
+      background: #ff69b4;
+      color: white;
+      font-size: 40px;
+      display: none;
+      z-index: 2;
+    }
+    #mainContent {
+      display: none;
+      padding: 30px;
+    }
+    #mainContent h1 {
+      font-size: 28px;
+    }
+    #mainContent p {
+      margin-top: 15px;
+      font-size: 18px;
+    }
+    .btnMemory {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ff69b4;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="passwordScreen" class="screen">
+  <h1>Enter Password</h1>
+  <input type="password" id="pwInput" placeholder="Password">
+  <button onclick="checkPw()">Enter</button>
+  <p id="errorText"></p>
+</div>
+
+<!-- WELCOME FULLSCREEN -->
+<div id="welcomeScreen" class="screen">
+  Welcome ICT 12-D 💗
+</div>
+
+<!-- MAIN PAGE CONTENT -->
+<div id="mainContent">
+  <h1>Memories of ICT 12-D</h1>
+  <p>
+    Hi guys!! I made this website for our memories, I'll make it memorable and enjoyable.
+    The time is so fast — we are going to be in college now and we will be separated.
+    I LOVE YOU GUYSS!! I made this for all of you guys!!
+  </p>
+  <a href="https://ianneokok-wq.github.io/ICT-12D/" class="btnMemory">View Our Memory</a>
+</div>
+
+<script>
+  const PASSWORD = "ict12d";
+
+  function checkPw() {
+    const val = document.getElementById("pwInput").value.trim().toLowerCase();
+    const err = document.getElementById("errorText");
+
+    if (val === PASSWORD) {
+      document.getElementById("passwordScreen").style.display = "none";
+      const welcome = document.getElementById("welcomeScreen");
+      welcome.style.display = "flex";
+
+      setTimeout(() => {
+        welcome.style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+      }, 2000);
+
+    } else {
+      err.textContent = "Wrong Password!";
+    }
+  }
+</script>
+
+</body>
+</html>

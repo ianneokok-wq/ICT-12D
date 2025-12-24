@@ -101,11 +101,11 @@
 .modal {
   width: 100%;
   max-width: 760px;
-  background: linear-gradient(145deg, rgba(25, 0, 40, 0.95), rgba(5, 0, 15, 0.9));
+  background: linear-gradient(145deg, rgba(219, 6, 138, 0.95), rgba(83, 83, 83, 0.9));
   border-radius: 20px;
   padding: 25px;
   color: #f5f5f5;
-  box-shadow: 0 0 25px rgba(162, 103, 255, 0.35);
+  box-shadow: 0 0 25px rgba(7, 7, 7, 0.35);
   display: flex;
   gap: 20px;
   align-items: flex-start;
@@ -161,7 +161,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,0,0,1), rgba(162,103,255,0.15));
+  background: linear-gradient(135deg, rgba(250, 250, 250, 0), rgba(162,103,255,0.15));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -179,7 +179,7 @@
   margin:0;
   font-size:22px;
   letter-spacing:0.3px;
-  color:green;
+  color:rgb(226, 230, 0);
 }
 
 .modal .meta p.role{
@@ -200,8 +200,8 @@
   gap:10px;
   flex-wrap:wrap;
   margin-top:6px;
-  font-size:13px;
-  color:#cfa7ff;
+  font-size:15px;
+  color:#000000;
   opacity:0.95;
 }
 
@@ -214,7 +214,7 @@
   border:none;
   cursor:pointer;
   background:linear-gradient(90deg,#FFD700,#DAA520);
-  color:black;
+  color:rgb(219, 0, 121);
   font-weight:700;
   box-shadow:0 6px 20px rgba(255,215,0,0.4);
   transition:all 0.3s ease;
@@ -298,7 +298,7 @@
        { file: "jana.png", name: "Bunga, Princess Jana ", role: "....", extra: ["....", "......"], message: "Let go,Let God!" },
        { file: "semana.png", name: "Semana, Mark Joseph ", role: "....", extra: ["....", "......"], message: "" },
        { file: "yeo.png", name: "Yeo, Danielle ", role: "....", extra: ["....", "......"], message: "" },
-       { file: "romano.png", name: "Romano, Princess ", role: "....", extra: ["....", "......"], message: "" },
+       { file: "romano.png", name: "Romano, Princess ", role: "....", extra: ["....", "......"], message: "Patience is a form of action" },
         { file: "pacayra.png", name: "Pacayra, Princess ", role: "....", extra: ["....", "......"], message: "" },
        { file: "franco.png", name: "Franco, Frix B. ", role: "....", extra: ["....", "......"], message: "" },
       { file: "bunga.png", name: "Bunga, John Ronel ", role: "....", extra: ["....", "......"], message: "wag kang titigil hanggat dika masarap" },
@@ -312,6 +312,7 @@
       { file: "fernandez.png", name: "Fernandez, Jheel ", role: "....", extra: ["....", "......"], message: "Walang imposible, Basta hindi ako gagawa" },
       { file: "timbal.png", name: "Timbal, Fernel Lexter F. ", role: "....", extra: ["....", "......"], message: "Walang imposible, Basta hindi ako gagawa" },
       { file: "terado.png", name: "Ace Dominic Saac Terrado  ", role: "....", extra: ["....", "......"], message: "kunin mona ang lahat saakin wag lang ang aking pagkain" },
+
       // ... add more entries here for all filenames you included earlier
       // If you only have filenames and want to auto-generate names, you can omit objects and we will fallback to filename-derived names.
     ];
@@ -321,9 +322,7 @@
       "adviser.jpg","teodorico.png","viray.jpeg","kelvin.png","lester.png","aj.png",
       "vistal.png","justine.png","lyle.png","gaco.png","jana.png","semana.png","yeo.png","romano.png",
       "pacayra.png","franco.png","bunga.png","tolentino.png","amante.png","tikistikis.png","genavia.png","secretario.png",
-      "lazam.png","valdemoro.png","fernandez.png","timbal.png","terado.png","lance.jpg","alyssa.jpg","denise.jpg",
-      "miguel.jpg","elijah.jpg","tiffany.jpg","leo.jpg","raven.jpg","trisha.jpg","nathan.jpg","bea.jpg",
-      "charles.jpg","diana.jpg"
+      "lazam.png","valdemoro.png","fernandez.png","timbal.png","terado.png",
     ];
 
     const grid = document.getElementById('classGrid');

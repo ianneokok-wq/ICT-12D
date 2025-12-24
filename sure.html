@@ -1,8 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Cute Password Welcome Page (Scrollable)</title>
   <style>
     /* Allow the page to scroll when content overflows */
@@ -124,108 +122,170 @@
       .photo-item{ width:120px }
       .photo-item img{ width:120px; height:120px }
     }
+    .welcome{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background:rgba(255,255,255,0.9);
+  color:#ff6f91;
+  font-size:40px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  animation:fadeIn 1s forwards;
+}
+
   </style>
 </head>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <body>
   <div class="container" id="loginBox">
-    <h2>🔐 Enter Your Secret Password</h2>
-    <input id="password" type="password" placeholder="Type password here..." />
-    <button onclick="checkPassword()">Submit</button>
-    <div class="small-note">Password: <strong>sir mc cute</strong></div>
-  </div>
+  <h2>🔐 Welcome</h2>
 
-  <div class="welcome" id="welcomeMsg">Welcome ICT-12-D!</div>
+  <input id="username" type="text" placeholder="Enter your name"
+    style="padding:12px 16px;border-radius:10px;border:2px solid #ffd1dc;font-size:16px;width:240px;margin-bottom:12px;">
+
+  <br>
+
+  <input id="password" type="password" placeholder="Enter password">
+  <br>
+  <button onclick="checkPassword()">Submit</button>
+
+  <div class="small-note">Password: <strong>sir mc cute</strong></div>
+</div>
+
+
+
+
+  <div class="welcome" id="welcomeMsg" style="display: none;">Welcome ICT-12-D!</div>
 
   <div class="gallery" id="gallery">
-    <div class="photo-item">
+
+    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
       <a href="hehe.html"><img src="Christmas.jpeg" alt="Christmas Party"></a>
       <p class="caption">Christmas Party</p>
     </div>
 
-    <div class="photo-item">
+    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
       <a href="memories.html"><img src="jsprom.jpeg" alt="JS Prom"></a>
       <p class="caption">JS Prom</p>
     </div>
 
-    <div class="photo-item">
+    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
       <a href="memories.html"><img src="tinikling.jpeg" alt="Tinikling"></a>
       <p class="caption">Tinikling</p>
     </div>
 
-    <div class="photo-item">
+    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
       <a href="memories.html"><img src="ballroom.jpeg" alt="Ballroom"></a>
       <p class="caption">Ballroom</p>
     </div>
 
-    <div class="photo-item">
+    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
       <a href="memories.html"><img src="cheerdance.jpeg" alt="Cheer Dance"></a>
       <p class="caption">Cheer Dance</p>
     </div>
   </div>
 
-  <button class="meet-button" id="meetBtn" onclick="goToClassmates()">👩‍🏫 Meet Our Class</button>
+  <button class="meet-button" id="meetBtn" onclick="goToClassmates()">
+👩‍🏫 Meet Our Class</button>
+<button class="meet-button" id="logoutBtn" onclick="logout()" 
+  style="background:#aaa; display:none;">
+  🚪 Log Out
+</button>
 
-  <audio id="bgMusic" loop>
+
+  <audio id="bgMusic" loop="">
     <source src="love.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // Check on page load if password was already entered
-    window.onload = function() {
-      if (localStorage.getItem("unlocked") === "true") {
-        unlockPage();
+  const firebaseConfig = {
+  apiKey: "AIzaSyCeN8VRqN21SzKkXNIWgqjdZpKjX51g8yo",
+  authDomain: "ict-12d.firebaseapp.com",
+  databaseURL: "https://ict-12d-default-rtdb.firebaseio.com",
+  projectId: "ict-12d",
+  };
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+    document.getElementById("gallery").style.display = "none";
+document.getElementById("meetBtn").style.display = "none";
 
-        /* If you want the container to remain in view after unlock (for example
-           if the page is long), you can scroll to the gallery automatically:
-        */
-        setTimeout(()=>{
-          const gallery = document.getElementById('gallery');
-          if(gallery) gallery.scrollIntoView({behavior:'smooth'});
-        }, 1400);
-      }
-    };
+  window.onload = function () {
+    const unlocked = localStorage.getItem("unlocked");
+    const name = localStorage.getItem("username");
 
-    function checkPassword(){
-      const input = document.getElementById('password').value.trim().toLowerCase();
-      if(input === 'sir mc cute'.toLowerCase()){
-        // Save login state so they don’t need to enter again
-        localStorage.setItem("unlocked", "true");
-        unlockPage();
-      } else {
-        alert('Wrong password! Try again.');
-      }
+    if (unlocked === "true" && name) {
+      unlockPage(name);
+    }
+  };
+
+  function checkPassword() {
+    const nameInput = document.getElementById("username").value.trim();
+    const passwordInput = document.getElementById("password").value.trim().toLowerCase();
+
+    if (!nameInput) {
+      alert("Please enter your name 💗");
+      return;
     }
 
-    function unlockPage() {
-      document.getElementById('loginBox').style.display='none';
-
-      const welcome = document.getElementById('welcomeMsg');
-      welcome.style.display='block';
-
-      setTimeout(()=>{
-        welcome.style.display='none';
-        const gallery = document.getElementById('gallery');
-        gallery.style.display='flex';
-        document.getElementById('meetBtn').style.display='inline-block';
-        const items = gallery.querySelectorAll('.photo-item');
-        items.forEach((item, index)=>{
-          setTimeout(()=>{
-            item.style.animationDelay = '0s';
-            item.style.opacity = '1';
-          }, index * 250);
-        });
-
-        // Play background music
-        const bg = document.getElementById('bgMusic');
-        if (bg) bg.play().catch(()=>{});
-
-        // If page is taller than viewport the body will scroll naturally.
-      }, 1200);
+    if (passwordInput === "sir mc cute") {
+      localStorage.setItem("unlocked", "true");
+      localStorage.setItem("username", nameInput);
+      unlockPage(nameInput);
+    } else {
+      alert("Wrong password! Try again 😢");
     }
+  }
 
-    function goToClassmates(){
-      window.location.href = 'ict.html';
-    }
-  </script>
+function unlockPage(name) {
+  document.getElementById("loginBox").style.display = "none";
+
+  const welcome = document.getElementById("welcomeMsg");
+  welcome.textContent = `Welcome, ${name}! 💖`;
+  welcome.style.display = "flex";
+
+  setTimeout(() => {
+    welcome.style.display = "none";
+
+    document.getElementById("gallery").style.display = "flex";
+    document.getElementById("meetBtn").style.display = "inline-block";
+    document.getElementById("logoutBtn").style.display = "inline-block";
+    const bg = document.getElementById("bgMusic");
+    if (bg) bg.play().catch(() => {});
+  }, 1800);
+  const userRef = db.ref("onlineUsers/" + name);
+
+userRef.set({
+  name: name,
+  joined: Date.now()
+});
+
+// Auto remove when tab closes
+userRef.onDisconnect().remove();
+
+}
+
+
+  function goToClassmates() {
+    window.location.href = "ict.html";
+  }
+  
+function logout() {
+  localStorage.removeItem("unlocked");
+  localStorage.removeItem("username");
+  location.reload();
+}
+
+</script>
+
+
 </body>
 </html>
