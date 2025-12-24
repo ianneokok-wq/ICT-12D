@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<style>
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:Poppins, sans-serif;
+    background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .card{
+    background:white;
+    padding:30px;
+    border-radius:25px;
+    width:350px;
+    box-shadow:0 15px 40px rgba(0,0,0,.2);
+    text-align:center;
+  }
+
+  h2{
+    color:#ff6f91;
+    margin-bottom:15px;
+  }
+
+  ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+
+  li{
+    padding:12px;
+    margin:10px 0;
+    background:#fff0f4;
+    border-radius:15px;
+    font-weight:600;
+    color:#ff6f91;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+
+  .dot{
+    width:10px;
+    height:10px;
+    background:#4CAF50;
+    border-radius:50%;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>👑 Admin Panel</h2>
+  <p>Users Online</p>
+  <ul id="users"></ul>
+</div>
+
+<script>
+  // 🔒 ADMIN PROTECTION
+  const adminPass = prompt("Admin password:");
+  if (adminPass !== "MY_ADMIN_PASSWORD") {
+    document.body.innerHTML = "Access Denied ❌";
+    throw new Error("Not admin");
+  }
+
+  // 🔑 FIREBASE CONFIG (YOUR REAL ONE)
+  const firebaseConfig = {
+  apiKey: "AIzaSyCeN8VRqN21SzKkXNIWgqjdZpKjX51g8yo",
+  authDomain: "ict-12d.firebaseapp.com",
+  databaseURL: "https://ict-12d-default-rtdb.firebaseio.com",
+  projectId: "ict-12d",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const usersList = document.getElementById("users");
+
+  db.ref("onlineUsers").on("value", snap => {
+    usersList.innerHTML = "";
+
+    if (!snap.exists()) {
+      usersList.innerHTML = "<li>No users online</li>";
+      return;
+    }
+
+    snap.forEach(child => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="dot"></span> ${child.key}`;
+      usersList.appendChild(li);
+    });
+  });
+</script>
+
+</body>
+</html>

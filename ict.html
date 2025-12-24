@@ -256,6 +256,9 @@
 }
 
   </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 </head>
 <body>
   <h1>👨‍🏫 ICT 12-D Family</h1>
@@ -281,6 +284,27 @@
   </div>
 
   <script>
+
+  const username = localStorage.getItem("username");
+
+  // 🚫 Block access if not logged in
+  if (!username) {
+    window.location.href = "sure.html";
+  } else {
+    // 🟢 Mark user online (same user, same node)
+    const userRef = db.ref("onlineUsers/" + username);
+
+    userRef.set({
+      name: username,
+      page: "ict.html",
+      lastActive: Date.now()
+    });
+
+    // 🔴 Auto-remove when user leaves site
+    userRef.onDisconnect().remove();
+  }
+
+
     // --- Person data: update this with real full names/messages as needed ---
     const people = [
       // Format: { file: "filename.jpg", name: "Full Name", role: "Role or nickname", extra: ["Adviser", "Batch 2025"], message: "Short message / quote" }
@@ -426,6 +450,18 @@
         if(document.activeElement === last){ first.focus(); e.preventDefault(); }
       }
     });
+    
+  const firebaseConfig = {
+  apiKey: "AIzaSyCeN8VRqN21SzKkXNIWgqjdZpKjX51g8yo",
+  authDomain: "ict-12d.firebaseapp.com",
+  databaseURL: "https://ict-12d-default-rtdb.firebaseio.com",
+  projectId: "ict-12d",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+
 
     // --- Notes for you ---
     // • To change a person's message or full name, edit the 'people' array above.
