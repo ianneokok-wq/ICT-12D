@@ -256,8 +256,6 @@
 }
 
   </style>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 </head>
 <body>
@@ -284,26 +282,6 @@
   </div>
 
   <script>
-
-  const username = localStorage.getItem("username");
-
-  // 🚫 Block access if not logged in
-  if (!username) {
-    window.location.href = "sure.html";
-  } else {
-    // 🟢 Mark user online (same user, same node)
-    const userRef = db.ref("onlineUsers/" + username);
-
-    userRef.set({
-      name: username,
-      page: "ict.html",
-      lastActive: Date.now()
-    });
-
-    // 🔴 Auto-remove when user leaves site
-    userRef.onDisconnect().remove();
-  }
-
 
     // --- Person data: update this with real full names/messages as needed ---
     const people = [
@@ -451,15 +429,6 @@
       }
     });
     
-  const firebaseConfig = {
-  apiKey: "AIzaSyCeN8VRqN21SzKkXNIWgqjdZpKjX51g8yo",
-  authDomain: "ict-12d.firebaseapp.com",
-  databaseURL: "https://ict-12d-default-rtdb.firebaseio.com",
-  projectId: "ict-12d",
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
 
 
 
@@ -468,5 +437,46 @@
     // • Add or replace image files in the same folder as this HTML (use the filename in 'file').
     // • If you want to auto-generate everyone from filenames only, clear the 'people' array.
   </script>
+  <!-- FIREBASE TRACKING (DO NOT PUT ANYWHERE ELSE) -->
+
+<!-- 🔥 FIREBASE TRACKING (SAFE VERSION) -->
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+   apiKey: "AIzaSyCeN8VRqN21SzKkXNIWgqjdZpKjX51g8yo",
+  authDomain: "ict-12d.firebaseapp.com",
+  databaseURL: "https://ict-12d-default-rtdb.firebaseio.com",
+  projectId: "ict-12d",
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const db = firebase.database();
+
+  // ✅ WAIT UNTIL PAGE IS LOADED
+  window.addEventListener("load", () => {
+    const username = localStorage.getItem("username");
+
+    // 🚫 DO NOTHING if not logged in (NO REDIRECT)
+    if (!username) return;
+
+    const userRef = db.ref("onlineUsers/" + username);
+
+    userRef.set({
+      name: username,
+      page: "ict.html",
+      time: Date.now()
+    });
+
+    userRef.onDisconnect().remove();
+  });
+</script>
+
+
 </body>
 </html>
