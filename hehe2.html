@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Funny Memories — Video Gallery</title>
+  <style>
+    :root{
+      --bg1:#ffdde1;
+      --bg2:#aee2ff;
+      --card-bg: rgba(255,255,255,0.12);
+      --glass: rgba(255,255,255,0.08);
+      --accent1:#ff6f91;
+      --text:#2d1630;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family: "Poppins", "Comic Neue", sans-serif;}
+    body{
+      min-height:100vh;
+      background: linear-gradient(135deg,var(--bg2),var(--bg1));
+      color:var(--text);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:28px;
+    }
+    header{
+      width:100%;
+      max-width:1100px;
+      text-align:center;
+      margin-bottom:22px;
+      color:#fff;
+      background: linear-gradient(135deg,#ffa8e2,#b59cff);
+      padding:18px 20px;
+      border-radius:14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+    header h1{font-size:1.8rem;}
+    header p{opacity:0.95;font-size:0.95rem;margin-top:6px;}
+
+    .grid{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      gap:20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-bottom:28px;
+    }
+
+    .card{
+      background: var(--card-bg);
+      padding:10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transition: transform .28s ease, box-shadow .28s ease;
+      cursor:pointer;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      overflow:hidden;
+    }
+    .card:focus, .card:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+      outline: none;
+    }
+
+    .thumb{
+      width:100%;
+      height:140px;
+      background: #000;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .thumb video, .thumb img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .play-overlay {
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+    }
+    .play-icon{
+      pointer-events:none;
+      font-size:40px;
+      color:rgba(255,255,255,0.9);
+      text-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
+
+    .card .title{font-weight:700;color:#fff;font-size:0.98rem;}
+    .card .meta{font-size:0.85rem;opacity:0.9;color:#f7e6f1;}
+
+    .back-btn{
+      padding:10px 18px;
+      border-radius:22px;
+      border:none;
+      background: linear-gradient(135deg,var(--accent1),#ffb6c1);
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(255,111,145,0.25);
+      margin-bottom:12px;
+    }
+
+    footer{
+      width:100%;
+      max-width:1100px;
+      margin-top:8px;
+      padding:12px;
+      text-align:center;
+      background:rgba(255,255,255,0.6);
+      border-radius:10px;
+      font-size:0.95rem;
+      color:#66335a;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding:20px;
+    }
+    .modal-backdrop.show { display:flex; }
+
+    .modal {
+      width:100%;
+      max-width:900px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:14px;
+      padding:18px;
+      color:#fff;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      position:relative;
+      max-height:90vh;
+      overflow:auto;
+    }
+
+    .modal .player {
+      flex: 1 1 560px;
+      min-width:0;
+    }
+    .modal video{
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      background:#000;
+      display:block;
+    }
+
+    .modal .info {
+      width:320px;
+      max-width: 320px;
+      flex: 0 0 320px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .modal .info h2{margin:0;color:var(--text);font-size:1.15rem;background:#fff;padding:8px;border-radius:8px;color:#2b1840;}
+    .modal .info p{margin:0;background:rgba(255,255,255,0.9);color:#55314b;padding:8px;border-radius:8px;font-size:0.95rem;}
+    .modal .info .extras{display:flex;gap:8px;flex-wrap:wrap;}
+    .tag{background:rgba(0,0,0,0.06);padding:6px 10px;border-radius:12px;font-size:0.85rem;color:#fff;opacity:0.95}
+
+    .close-btn {
+      margin-top:auto;
+      align-self:flex-end;
+      padding:10px 14px;
+      border-radius:12px;
+      border:none;
+      cursor:pointer;
+      background:linear-gradient(90deg,#FFD700,#DAA520);
+      color:black;
+      font-weight:700;
+      box-shadow:0 6px 20px rgba(255,215,0,0.25);
+    }
+
+    @media (max-width:820px){
+      .modal{flex-direction:column;}
+      .modal .info{width:100%;max-width:100%;}
+      .modal .player{order:0;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Funny Memories 🤪💕 — Video Gallery</h1>
+    <p>Click any tile to open the video in a modal. Edit the video list in the script below.</p>
+  </header>
+
+  <main class="grid" id="gallery" aria-live="polite"></main>
+
+  <button class="back-btn" onclick="window.location.href='sure.html'">⬅ Back to Home</button>
+
+  <footer>Made with giggles 😆 | ICT 12-D</footer>
+
+  <!-- Modal -->
+  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-hidden="true" aria-labelledby="modalTitle">
+    <div class="modal" role="document" aria-modal="true">
+      <div class="player">
+        <video id="modalVideo" controls preload="metadata">
+          <source id="modalSource" src="" type="video/mp4">
+          Your browser does not support the video element.
+        </video>
+      </div>
+      <div class="info" id="modalInfo">
+        <h2 id="modalTitle">Title</h2>
+        <p id="modalDesc">Description</p>
+        <div class="extras" id="modalExtras"></div>
+        <button class="close-btn" id="modalClose">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ----- Configure your videos here -----
+    // Each entry: { file: 'path/to/video.mp4', poster: 'optional-thumbnail.jpg', title: 'Title', desc: 'Short description', tags: ['tag1','tag2'] }
+    const videos = [
+      { file: '/videos/cute.mp4', poster: '/videos/cute.jpg', title: 'Cute 🐣', desc: 'Our silly start — small but mighty fun!', tags: ['Intro', 'Cute'] },
+      { file: '/videos/cuter.mp4', poster: '/videos/cuter.jpg', title: 'Cuter 🧁', desc: 'Things got even funnier here!', tags: ['Funny'] },
+      { file: '/videos/cutest.mp4', poster: '/videos/cutest.jpg', title: 'Cutest 🐼', desc: 'When chaos met cuteness — perfection!', tags: ['Chaos','Cute'] },
+      { file: '/videos/cut.mp4', poster: '/videos/cut.jpg', title: 'Cut ✂️', desc: 'Oops! Who edited this one?! 😂', tags: ['Bloopers'] },
+      { file: '/videos/clear.mp4', poster: '/videos/clear.jpg', title: 'Clear 💎', desc: 'Ending with clarity... or maybe confusion?', tags: ['Finale'] }
+    ];
+
+    const gallery = document.getElementById('gallery');
+
+    // Build cards
+    videos.forEach((v, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'card';
+      btn.type = 'button';
+      btn.setAttribute('aria-label', `Open video ${v.title}`);
+      btn.innerHTML = `
+        <div class="thumb" aria-hidden="true">
+          ${ v.poster ? `<img src="${v.poster}" alt="${v.title} thumbnail">` : `<video src="${v.file}#t=0.1" muted playsinline preload="metadata" aria-hidden="true"></video>` }
+          <div class="play-overlay"><span class="play-icon">▶</span></div>
+        </div>
+        <div class="title">${v.title}</div>
+        <div class="meta">${v.desc}</div>
+      `;
+      btn.addEventListener('click', () => openModal(i));
+      gallery.appendChild(btn);
+    });
+
+    // Modal elements
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalVideo = document.getElementById('modalVideo');
+    const modalSource = document.getElementById('modalSource');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalExtras = document.getElementById('modalExtras');
+    const modalClose = document.getElementById('modalClose');
+
+    let lastFocused = null;
+
+    function openModal(index){
+      const v = videos[index];
+      lastFocused = document.activeElement;
+      modalSource.src = v.file;
+      modalVideo.load();
+      if(v.poster) modalVideo.setAttribute('poster', v.poster); else modalVideo.removeAttribute('poster');
+      modalTitle.textContent = v.title || '';
+      modalDesc.textContent = v.desc || '';
+      modalExtras.innerHTML = '';
+      if(Array.isArray(v.tags)){
+        v.tags.forEach(t => {
+          const span = document.createElement('span');
+          span.className = 'tag';
+          span.textContent = t;
+          modalExtras.appendChild(span);
+        });
+      }
+      modalBackdrop.classList.add('show');
+      modalBackdrop.setAttribute('aria-hidden','false');
+      // focus the close button (so keyboard users can easily close)
+      modalClose.focus();
+      // Optionally auto-play:
+      // modalVideo.play().catch(()=>{/* autoplay may be blocked */});
+    }
+
+    function closeModal(){
+      // pause & reset
+      try {
+        modalVideo.pause();
+        modalVideo.currentTime = 0;
+      } catch(e){}
+      modalBackdrop.classList.remove('show');
+      modalBackdrop.setAttribute('aria-hidden','true');
+      // clear source to free memory
+      modalSource.src = '';
+      modalVideo.load();
+      if(lastFocused) lastFocused.focus();
+    }
+
+    modalClose.addEventListener('click', closeModal);
+
+    // Click outside modal content closes it
+    modalBackdrop.addEventListener('click', (e) => {
+      if(e.target === modalBackdrop) closeModal();
+    });
+
+    // Esc closes modal, trap tab when open
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modalBackdrop.classList.contains('show')) {
+        closeModal();
+      }
+      if(!modalBackdrop.classList.contains('show')) return;
+      if(e.key !== 'Tab') return;
+      const focusable = modalBackdrop.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const arr = Array.prototype.slice.call(focusable);
+      if(arr.length === 0) return;
+      const first = arr[0];
+      const last = arr[arr.length -1];
+      if(e.shiftKey){
+        if(document.activeElement === first){ last.focus(); e.preventDefault(); }
+      } else {
+        if(document.activeElement === last){ first.focus(); e.preventDefault(); }
+      }
+    });
+
+    // Accessibility note: if you add many controls inside the modal, ensure they are reachable.
+  </script>
+</body>
+</html>
