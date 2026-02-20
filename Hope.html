@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Last Hope</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #020203;
+      --text: #a8a8a8;
+      --highlight: #f0f0f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+    }
+
+    .fog-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.3;
+      background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, transparent 60%);
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 300;
+      letter-spacing: 10px;
+      color: var(--highlight);
+      opacity: 0;
+      transform: scale(0.95);
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .hero p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 5px;
+      margin-top: 20px;
+      opacity: 0;
+      text-transform: uppercase;
+    }
+
+    .memory-section {
+      min-height: 150vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 100px;
+    }
+
+    .memory-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 100vh;
+    }
+
+    .memory-img {
+      position: absolute;
+      opacity: 0;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      filter: sepia(30%) desaturate(40%) contrast(0.9);
+      transition: filter 1s ease;
+    }
+
+    .memory-img:hover {
+      filter: sepia(0%) desaturate(0%) contrast(1);
+    }
+
+    .img-1 { top: 0; left: 10%; width: 250px; z-index: 1; }
+    .img-2 { top: 20%; right: 10%; width: 300px; z-index: 2; }
+    .img-3 { top: 50%; left: 20%; width: 280px; z-index: 3; }
+    .img-4 { top: 60%; right: 15%; width: 220px; z-index: 1; }
+
+    .narrative-section {
+      padding: 100px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 5;
+    }
+
+    .ghost-text {
+      font-size: 1.8rem;
+      line-height: 2;
+      max-width: 600px;
+      margin-bottom: 80px;
+      color: #888;
+      font-style: italic;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .ghost-text strong {
+      color: var(--highlight);
+      font-weight: 400;
+      display: block;
+      font-size: 2.2rem;
+      margin-top: 10px;
+    }
+
+    .final-hope {
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .fading-line {
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, white, transparent);
+      margin-bottom: 30px;
+    }
+
+    .replay-link {
+      margin-top: 50px;
+      color: #444;
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: color 0.5s;
+      cursor: pointer;
+    }
+    
+    .replay-link:hover {
+      color: white;
+    }
+
+    /* Phone responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; letter-spacing: 5px; }
+      .hero p { font-size: 0.6rem; letter-spacing: 3px; }
+      .img-1 { width: 150px; left: 5%; }
+      .img-2 { width: 180px; right: 5%; }
+      .img-3 { width: 170px; left: 10%; }
+      .img-4 { width: 140px; right: 10%; }
+      .ghost-text { font-size: 1.3rem; padding: 0 15px; }
+      .ghost-text strong { font-size: 1.6rem; }
+      .narrative-section { padding: 60px 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="fog-container"></div>
+
+  <section class="hero">
+    <h1>The Last Hope</h1>
+    <p>Even the brightest stars eventually fade.</p>
+  </section>
+
+  <section class="memory-section">
+    <div class="memory-container">
+      <img src="yow.jpg" class="memory-img img-1">
+      <img src="oo.jpg" class="memory-img img-2">
+      <img src="op.jpg" class="memory-img img-3">
+      <img src="oi.jpg" class="memory-img img-4">
+    </div>
+  </section>
+
+  <section class="narrative-section">
+    <p class="ghost-text">
+      The room is quiet now. <br>
+      The noise has stopped. The deadlines are gone. The rush is over.
+    </p>
+
+    <p class="ghost-text">
+      We spent so much time wishing for this to be over. We counted the days. We watched the clock.
+      <strong>But now that the clock has stopped, why does the silence feel so heavy?</strong>
+    </p>
+
+    <p class="ghost-text">
+      We are packing away more than just books and papers. We are packing away a version of ourselves that will never exist again.
+    </p>
+
+    <p class="ghost-text">
+      They say "all good things come to an end." <br>
+      But they never told us how much the ending would hurt.
+    </p>
+
+    <p class="ghost-text">
+      So here is <strong>The Last Hope.</strong>
+    </p>
+
+    <p class="ghost-text">
+      My hope is not that we stay the same. We cannot. <br>
+      My hope is not that we never drift apart. We will. <br>
+      That is the tragedy of growing up.
+    </p>
+
+    <p class="ghost-text">
+      My hope is simply this:<br>
+      That on a random Tuesday, years from now, something small—a song, a smell, a phrase—will remind you of this room.
+    </p>
+
+    <p class="ghost-text">
+      And for one second, you will close your eyes and be back here with us. <br>
+      Young. Full of dreams. And together.
+    </p>
+  </section>
+
+  <section class="final-hope">
+    <div class="fading-line"></div>
+    <h2 style="font-size: 1.5rem; letter-spacing: 5px; font-weight: 300;">DON'T FORGET US.</h2>
+    <div onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="replay-link">Return to the start</div>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to(".hero h1", { opacity: 1, scale: 1, duration: 3, ease: "power2.out" });
+    gsap.to(".hero p", { opacity: 0.7, y: -10, delay: 1.5, duration: 2 });
+
+    const images = gsap.utils.toArray('.memory-img');
+    
+    images.forEach((img, i) => {
+      gsap.to(img, {
+        opacity: 0.8,
+        duration: 2,
+        scrollTrigger: {
+          trigger: img,
+          start: "top 80%",
+          end: "top 50%",
+          scrub: 1
+        }
+      });
+
+      gsap.to(img, {
+        y: -100 * (i + 1),
+        scrollTrigger: {
+          trigger: ".memory-section",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 2
+        }
+      });
+    });
+
+    const texts = gsap.utils.toArray('.ghost-text');
+
+    texts.forEach(text => {
+      gsap.to(text, {
+        opacity: 1,
+        y: 0,
+        duration: 2.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: text,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        }
+      });
+    });
+
+    gsap.from(".fading-line", {
+      height: 0,
+      duration: 2,
+      scrollTrigger: {
+        trigger: ".final-hope",
+        start: "top 70%"
+      }
+    });
+
+  </script>
+
+</body>
+</html>

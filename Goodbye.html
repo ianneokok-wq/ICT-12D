@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Moment Before Goodbye</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Mulish:wght@300;400&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #fdfbf7;
+      --text: #2c2c2c;
+      --accent: #d4af37;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Mulish', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Italiana', serif;
+      font-weight: 400;
+    }
+
+    .script-font {
+      font-family: 'Pinyon Script', cursive;
+      color: var(--accent);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      opacity: 0;
+      color: #888;
+    }
+
+    .hero-title {
+      font-size: 5rem;
+      line-height: 1;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .hero-title span {
+      display: block;
+      font-size: 2rem;
+      font-family: 'Pinyon Script', cursive;
+      color: var(--accent);
+      text-transform: none;
+      letter-spacing: 0;
+      margin-top: 10px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.5;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+
+    .mosaic-section {
+      padding: 100px 10%;
+      position: relative;
+    }
+
+    .mosaic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-bottom: 100px;
+    }
+
+    .mosaic-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .mosaic-item:nth-child(2) { margin-top: 50px; }
+    .mosaic-item:nth-child(3) { margin-top: -30px; }
+
+    .mosaic-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 1.5s ease;
+      filter: sepia(0.2) contrast(0.9);
+    }
+
+    .mosaic-item:hover img {
+      transform: scale(1.1);
+      filter: sepia(0) contrast(1);
+    }
+
+    .speech-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding-bottom: 150px;
+      text-align: left;
+    }
+
+    .speech-line {
+      font-size: 1.4rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .highlight {
+      font-family: 'Italiana', serif;
+      font-size: 2rem;
+      color: #222;
+      display: block;
+      margin: 40px 0;
+      border-left: 2px solid var(--accent);
+      padding-left: 30px;
+    }
+
+    .footer {
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: #f4f1ea;
+    }
+
+    .final-signature {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 4rem;
+      color: var(--accent);
+    }
+
+    .replay-btn {
+      margin-top: 40px;
+      background: transparent;
+      border: 1px solid #aaa;
+      padding: 15px 40px;
+      font-family: 'Mulish', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .replay-btn:hover {
+      background: #222;
+      color: white;
+      border-color: #222;
+    }
+
+    /* Phone responsive */
+    @media (max-width: 768px) {
+      .hero-title { font-size: 3rem; }
+      .hero-title span { font-size: 1.5rem; }
+      .mosaic-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 50px 5%; }
+      .mosaic-item:nth-child(2), .mosaic-item:nth-child(3) { margin-top: 0; }
+      .speech-section { padding: 0 20px 80px; }
+      .speech-line { font-size: 1.1rem; }
+      .highlight { font-size: 1.4rem; padding-left: 15px; }
+      .final-signature { font-size: 2.5rem; }
+      .script-font { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-subtitle">Class of 2026 • Senior High School</div>
+    <h1 class="hero-title">
+      We Made It.
+      <span>The Moment Before Goodbye</span>
+    </h1>
+    <div class="scroll-hint">Scroll to Remember</div>
+  </section>
+
+  <section class="mosaic-section">
+    <div class="mosaic-grid">
+      <div class="mosaic-item"><img src="yow.jpg"></div>
+      <div class="mosaic-item"><img src="oo.jpg"></div>
+      <div class="mosaic-item"><img src="op.jpg"></div>
+      <div class="mosaic-item"><img src="oi.jpg"></div>
+      <div class="mosaic-item"><img src="ou.jpg"></div>
+      <div class="mosaic-item"><img src="ooo.jpg"></div>
+    </div>
+  </section>
+
+  <section class="speech-section">
+    <span class="script-font">To my batchmates,</span>
+    
+    <p class="speech-line">
+      We spent four years in Junior High dreaming about this moment. Then we spent two years in Senior High working for it. And now, suddenly, it is here.
+    </p>
+
+    <p class="speech-line">
+      Grade 12 was not easy. It was research papers that never ended. It was college applications that kept us up at night. It was the pressure of "what comes next" hanging over our heads every single day.
+    </p>
+
+    <div class="speech-line highlight">
+      "But amidst the stress, we built a home."
+    </div>
+
+    <p class="speech-line">
+      We survived the defense. We survived the exams. We survived the uncertainty.
+    </p>
+    
+    <p class="speech-line">
+      But looking around this room now, I don't see the struggle anymore. I see faces I have grown up with. I see the people who shared their lunch, who shared their answers, and who shared their dreams.
+    </p>
+
+    <p class="speech-line">
+      This is the moment before goodbye. The moment before we take off our uniforms for the last time. The moment before we go from "classmates" to "memories."
+    </p>
+
+    <p class="speech-line">
+      We are about to step into the real world. It will be big, and it will be scary. But we can face it with heads held high because we conquered this chapter together.
+    </p>
+
+    <p class="speech-line">
+      So take a look around. Memorize these smiles. Because we will never be this young, and this together, ever again.
+    </p>
+
+    <p class="speech-line" style="margin-top: 80px; font-weight: bold;">
+      Congratulations, Seniors. We did it.
+    </p>
+  </section>
+
+  <section class="footer">
+    <p style="letter-spacing: 3px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 20px;">End of Chapter</p>
+    <h1 class="final-signature">Good luck on your journey.</h1>
+    <button class="replay-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Replay</button>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const tl = gsap.timeline();
+    tl.to(".hero-subtitle", { opacity: 1, duration: 1.5, delay: 0.5 })
+      .to(".hero-title", { opacity: 1, y: 0, duration: 1.5, ease: "power3.out" }, "-=1");
+
+    const items = gsap.utils.toArray('.mosaic-item');
+    items.forEach((item, i) => {
+      gsap.to(item, {
+        scrollTrigger: {
+          trigger: item,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        },
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power3.out"
+      });
+    });
+
+    const lines = gsap.utils.toArray('.speech-line');
+    lines.forEach(line => {
+      gsap.to(line, {
+        scrollTrigger: {
+          trigger: line,
+          start: "top 80%",
+          end: "top 50%",
+          scrub: 1
+        },
+        opacity: 1,
+        y: 0,
+        duration: 1
+      });
+    });
+
+    gsap.from(".final-signature", {
+      scrollTrigger: {
+        trigger: ".footer",
+        start: "top 70%"
+      },
+      scale: 0.9,
+      opacity: 0,
+      duration: 1.5,
+      ease: "back.out(1.7)"
+    });
+
+  </script>
+
+</body>
+</html>

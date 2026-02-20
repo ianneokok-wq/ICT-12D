@@ -104,6 +104,15 @@
       box-shadow:0 0 25px rgba(212,169,10,0.9);
       background:linear-gradient(135deg,#ffdc73,var(--gold));
     }
+
+    /* Phone responsive */
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      .photo-caption { padding: 16px; }
+      .photo-caption h2 { font-size: 24px; }
+      .photo-caption p { font-size: 14px; }
+      .btn-unique { padding: 12px 20px; font-size: 15px; }
+    }
   </style>
 </head>
 <body>
@@ -117,7 +126,6 @@
       <a class="btn-unique" href="sure.html">View Our Memory</a>
     </div>
   </div>
-<!-- 🔥 FIREBASE TRACKING (SAFE VERSION) -->
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -136,11 +144,9 @@
 
   const db = firebase.database();
 
-  // ✅ WAIT UNTIL PAGE IS LOADED
   window.addEventListener("load", () => {
     const username = localStorage.getItem("username");
 
-    // 🚫 DO NOTHING if not logged in (NO REDIRECT)
     if (!username) return;
 
     const userRef = db.ref("onlineUsers/" + username);

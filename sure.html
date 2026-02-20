@@ -1,291 +1,285 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Cute Password Welcome Page (Scrollable)</title>
+  <title>The Last Page - ICT-12-D</title>
   <style>
-    /* Allow the page to scroll when content overflows */
+    /* --- MELANCHOLIC THEME: FADED MEMORIES --- */
     html, body {
       margin: 0;
       padding: 0;
       min-height: 100%;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg,#ffdde1,#ee9ca7);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      /* Deep, dark twilight background */
+      background: linear-gradient(to bottom, #1b2028 0%, #0a0c10 100%);
+      color: #d1d5db;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
-    body{
-      /* Use padding so content can scroll instead of being clipped */
+    body {
       padding: 40px 20px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      overflow: auto; /* <-- allow page scrolling */
+      overflow: auto; 
     }
 
-    .container{
-      background:white;
-      padding:40px 30px;
-      border-radius:30px;
-      box-shadow:0 10px 40px rgba(0,0,0,0.15);
-      text-align:center;
-      position:relative;
-      transition:opacity 1s ease;
-      max-width:900px;
-      width:100%;
-      margin-bottom:24px;
+    .container {
+      background: rgba(30, 35, 45, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 40px 30px;
+      border-radius: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      text-align: center;
+      position: relative;
+      transition: opacity 1s ease;
+      max-width: 900px;
+      width: 100%;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 10;
     }
 
-    h2{ margin-bottom:20px; color:#ff6f91; font-weight:600; font-size:26px }
-    input[type=password]{ padding:12px 16px; border-radius:10px; border:2px solid #ffd1dc; font-size:16px; outline:none; width:240px; transition:all .2s; }
-    input[type=password]:focus{ border-color:#ff6f91; box-shadow:0 0 10px rgba(255,111,145,0.4); }
-    button{ margin-top:15px; padding:10px 25px; border:none; border-radius:20px; background:#ff6f91; color:white; font-size:16px; cursor:pointer; transition:0.3s; }
-    button:hover{ background:#ff85a2; transform:scale(1.05); }
+    /* Muted, icy blue for headings */
+    h2 { margin-bottom: 10px; color: #8ca8d8; font-weight: 600; font-size: 28px; letter-spacing: 1px; }
+    .sub-text { font-size: 14px; color: #6b7280; margin-bottom: 25px; font-style: italic; }
 
-    .welcome{ display:none; font-size:32px; color:#ff6f91; font-weight:700; animation:fadeIn 2s forwards; margin-bottom:16px; }
-    @keyframes fadeIn{ 0%{opacity:0;transform:scale(0.8);} 100%{opacity:1;transform:scale(1);} }
-
-    /* Gallery styles: it can grow and page will scroll when needed */
-    .gallery{ 
-      display:none; 
-      flex-wrap:wrap; 
-      justify-content:center; 
-      gap:20px; 
-      margin-top:20px; 
-      max-width:1100px; 
-      width:100%;
-      box-sizing:border-box;
-      padding:10px;
+    input[type=text], input[type=password] { 
+      padding: 12px 16px; border-radius: 10px; border: 2px solid #374151; 
+      background: rgba(0, 0, 0, 0.3); font-size: 16px; outline: none; 
+      width: 240px; transition: all .4s ease; color: #f3f4f6;
     }
+
+    input:focus { border-color: #8ca8d8; box-shadow: 0 0 15px rgba(140, 168, 216, 0.2); background: rgba(0,0,0,0.5); }
+
+    button { 
+      margin-top: 15px; padding: 10px 30px; border: none; border-radius: 50px; 
+      background: linear-gradient(135deg, #4b5a75, #2a3441); color: white; 
+      font-size: 16px; cursor: pointer; transition: 0.4s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(140, 168, 216, 0.2); }
+
+    .welcome {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(10, 12, 16, 0.98); color: #8ca8d8; font-size: 40px; font-weight: 700;
+      align-items: center; justify-content: center; z-index: 9999; animation: fadeIn 1.5s forwards; flex-direction: column;
+    }
+    
+    .welcome span { font-size: 18px; color: #6b7280; margin-top: 10px; font-weight: 400; }
+    @keyframes fadeIn { 0% {opacity:0; transform:scale(0.95);} 100% {opacity:1; transform:scale(1);} }
+
+    /* Horizontal Gallery Layout */
+    .gallery { 
+      display: none; 
+      flex-wrap: nowrap; /* Forces a single horizontal row */
+      overflow-x: auto;  /* Adds horizontal scrolling */
+      overflow-y: hidden;
+      justify-content: flex-start; 
+      gap: 30px; 
+      margin-top: 20px; 
+      max-width: 95vw; 
+      width: 100%; 
+      box-sizing: border-box; 
+      padding: 20px; 
+      z-index: 10;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom scrollbar for the gallery */
+    .gallery::-webkit-scrollbar { height: 8px; }
+    .gallery::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+    .gallery::-webkit-scrollbar-thumb { background: #4b5a75; border-radius: 10px; }
 
     .photo-item {
-      text-align:center;
-      opacity:0;
-      transform:scale(0.5);
-      animation:popUp 0.8s forwards;
-      transition:transform 0.4s ease, box-shadow 0.4s ease;
-      width:150px;
+      text-align: center; opacity: 0; transform: scale(0.9) translateY(20px);
+      animation: popUp 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      transition: transform 0.4s ease; 
+      width: 300px; /* Much bigger width */
+      flex-shrink: 0; /* Prevents images from squishing in the row */
+      position: relative;
     }
 
-    .photo-item img{
-      width:150px; 
-      height:150px; 
-      object-fit:cover; 
-      border-radius:20px; 
-      box-shadow:0 5px 20px rgba(0,0,0,0.2);
-      cursor:pointer;
-      display:block;
+    /* Photos look highly faded and desaturated initially */
+    .photo-item img {
+      width: 300px; 
+      height: 300px; /* Larger, square aspect ratio */
+      object-fit: cover; border-radius: 10px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5); cursor: pointer; display: block;
+      border: 2px solid #374151; 
+      filter: grayscale(0.9) brightness(0.6) contrast(1.2); 
+      transition: all 0.7s ease;
     }
 
-    .photo-item img:hover{ 
-      transform:scale(1.08) rotate(2deg); 
-      box-shadow:0 10px 30px rgba(255,111,145,0.5); 
+    .photo-item img:hover { 
+      transform: scale(1.03); 
+      box-shadow: 0 15px 35px rgba(140, 168, 216, 0.2); 
+      filter: grayscale(0) brightness(1) contrast(1); /* Color returns on hover */
+      border-color: #8ca8d8;
     }
 
-    @keyframes popUp{ 
-      to{opacity:1;transform:scale(1);} 
-    }
-
-    .caption {
-      margin-top:8px;
-      font-size:16px;
-      color:#ff6f91;
-      font-weight:600;
-      text-shadow:0 1px 3px rgba(0,0,0,0.2);
-    }
+    @keyframes popUp { to {opacity:1; transform:scale(1) translateY(0);} }
+    .caption { margin-top: 15px; font-size: 16px; color: #9ca3af; font-weight: 500; font-style: italic; letter-spacing: 0.5px; }
 
     .meet-button {
-      display:none;
-      margin-top:30px;
-      padding:12px 30px;
-      border:none;
-      border-radius:25px;
-      background:linear-gradient(135deg,#ff6f91,#ffb6c1);
-      color:white;
-      font-size:18px;
-      font-weight:600;
-      cursor:pointer;
-      box-shadow:0 5px 15px rgba(255,111,145,0.4);
-      transition:all 0.3s ease;
+      display: none; margin-top: 30px; padding: 12px 35px; border: none; border-radius: 50px;
+      background: linear-gradient(135deg, #4b5a75, #2a3441); color: white; font-size: 18px; font-weight: 600;
+      cursor: pointer; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); transition: all 0.3s ease; z-index: 10;
     }
 
-    .meet-button:hover{ transform:scale(1.08); box-shadow:0 10px 25px rgba(255,111,145,0.6); }
+    .meet-button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(140, 168, 216, 0.2); }
 
-    audio{display:none;}
-    .small-note{ font-size:13px; color:#666; margin-top:8px; }
-
-    /* Responsive tweaks */
-    @media (max-width:480px){
-      input[type=password]{ width:200px; }
-      .photo-item{ width:120px }
-      .photo-item img{ width:120px; height:120px }
+    /* Falling Petals Effect - Changed to look like ash or faded memories */
+    .petal {
+        position: fixed; top: -10%; background: rgba(200, 200, 210, 0.3);
+        border-radius: 100% 0 100% 0; z-index: 1; animation: fall linear infinite;
+        filter: blur(1px);
     }
-    .welcome{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100vw;
-  height:100vh;
-  background:rgba(255,255,255,0.9);
-  color:#ff6f91;
-  font-size:40px;
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-  animation:fadeIn 1s forwards;
-}
+    @keyframes fall {
+        0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+        20% { opacity: 0.5; }
+        100% { transform: translate(100px, 100vh) rotate(360deg); opacity: 0; }
+    }
 
+    .footer-quote {
+      margin-top: 40px; color: #6b7280; font-size: 14px; opacity: 0.8;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5); z-index: 10; text-align: center; display: none; 
+    }
+
+    @media (max-width:480px) {
+      input[type=text], input[type=password] { width: 200px; }
+      .photo-item { width: 240px; }
+      .photo-item img { width: 240px; height: 240px; }
+    }
   </style>
 </head>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <body>
+  <div id="petal-container"></div>
+
   <div class="container" id="loginBox">
-  <h2>🔐 Welcome</h2>
+    <h2>🔐 The Archives</h2>
+    <div class="sub-text">"Don't cry because it's over, smile because it happened."</div>
+    <input id="username" type="text" placeholder="Enter your name" style="margin-bottom:12px;"><br>
+    <input id="password" type="password" placeholder="Enter password"><br>
+    <button onclick="checkPassword()">Unlock Memories</button>
+    <div class="small-note" style="margin-top: 10px; font-size: 12px; color: #6b7280;">Password hint: <strong>sir mc cute</strong></div>
+  </div>
 
-  <input id="username" type="text" placeholder="Enter your name"
-    style="padding:12px 16px;border-radius:10px;border:2px solid #ffd1dc;font-size:16px;width:240px;margin-bottom:12px;">
-
-  <br>
-
-  <input id="password" type="password" placeholder="Enter password">
-  <br>
-  <button onclick="checkPassword()">Submit</button>
-
-  <div class="small-note">Password: <strong>sir mc cute</strong></div>
-</div>
-
-
-
-
-  <div class="welcome" id="welcomeMsg" style="display: none;">Welcome ICT-12-D!</div>
+  <div class="welcome" id="welcomeMsg" style="display: none;">
+      <div id="welcomeText">Welcome ICT-12-D!</div>
+      <span>Loading memories...</span>
+  </div>
 
   <div class="gallery" id="gallery">
-
-    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
-      <a href="hehe.html"><img src="Christmas.jpeg" alt="Christmas Party"></a>
-      <p class="caption">Christmas Party</p>
+    <div class="photo-item" style="animation-delay: 0.1s;">
+      <a href="Run.html"><img src="Run.png" alt="The Last Run"></a>
+      <p class="caption">The Last Run</p>
     </div>
 
-    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
-      <a href="video.html"><img src="jsprom.jpeg" alt="JS Prom"></a>
-      <p class="caption">JS Prom</p>
+    <div class="photo-item" style="animation-delay: 0.3s;">
+      <a href="Bond.html"><img src="The Last Bond.png" alt="The Last Bond"></a>
+      <p class="caption">The Last Bond</p>
     </div>
 
-    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
-      <a href="memories.html"><img src="tinikling.jpeg" alt="Tinikling"></a>
-      <p class="caption">Tinikling</p>
+    <div class="photo-item" style="animation-delay: 0.5s;">
+      <a href="Principle.html"><img src="The Last Principle.png" alt="The Last Principle"></a>
+      <p class="caption">The Last Principle</p>
     </div>
 
-    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
-      <a href="memories.html"><img src="ballroom.jpeg" alt="Ballroom"></a>
-      <p class="caption">Ballroom</p>
+    <div class="photo-item" style="animation-delay: 0.7s;">
+      <a href="Hope.html"><img src="The Last Hope.png" alt="The Last Hope"></a>
+      <p class="caption">The Last Hope</p>
     </div>
 
-    <div class="photo-item" style="animation-delay: 0s; opacity: 1;">
-      <a href="memories.html"><img src="cheerdance.jpeg" alt="Cheer Dance"></a>
-      <p class="caption">Cheer Dance</p>
+    <div class="photo-item" style="animation-delay: 0.9s;">
+      <a href="Goodbye.html"><img src="The Last Moment Before Goodbye.png" alt="The Last Moment Before Goodbye"></a>
+      <p class="caption">The Last Moment Before Goodbye</p>
     </div>
   </div>
 
-  <button class="meet-button" id="meetBtn" onclick="goToClassmates()">
-👩‍🏫 Meet Our Class</button>
-<button class="meet-button" id="logoutBtn" onclick="logout()" 
-  style="background:#aaa; display:none;">
-  🚪 Log Out
-</button>
+  <div style="display:flex; gap:10px; justify-content: center; width: 100%;">
+    <button class="meet-button" id="meetBtn" onclick="goToClassmates()">👩‍🏫 Return to Class</button>
+    <button class="meet-button" id="logoutBtn" onclick="logout()" style="background:#4b5a75;">🚪 Log Out</button>
+  </div>
 
+  <div class="footer-quote" id="footerQuote">Endings are just new beginnings in disguise.</div>
 
   <audio id="bgMusic" loop="">
     <source src="love.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyCeN8VRqN21SzKkXNIWgqjdZpKjX51g8yo",
-  authDomain: "ict-12d.firebaseapp.com",
-  databaseURL: "https://ict-12d-default-rtdb.firebaseio.com",
-  projectId: "ict-12d",
-  };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-    document.getElementById("gallery").style.display = "none";
-document.getElementById("meetBtn").style.display = "none";
+  function createPetals() {
+    for (let i = 0; i < 20; i++) {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        petal.style.left = Math.random() * 100 + 'vw';
+        petal.style.width = Math.random() * 8 + 4 + 'px';
+        petal.style.height = petal.style.width;
+        petal.style.animationDuration = Math.random() * 4 + 5 + 's'; 
+        petal.style.animationDelay = Math.random() * 5 + 's';
+        document.body.appendChild(petal);
+    }
+  }
+  createPetals();
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCeN8VRqN21SzKkXNIWgqjdZpKjX51g8yo",
+    authDomain: "ict-12d.firebaseapp.com",
+    databaseURL: "https://ict-12d-default-rtdb.firebaseio.com",
+    projectId: "ict-12d",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  
   window.onload = function () {
     const unlocked = localStorage.getItem("unlocked");
     const name = localStorage.getItem("username");
-
-    if (unlocked === "true" && name) {
-      unlockPage(name);
-    }
+    if (unlocked === "true" && name) unlockPage(name);
   };
 
   function checkPassword() {
     const nameInput = document.getElementById("username").value.trim();
     const passwordInput = document.getElementById("password").value.trim().toLowerCase();
-
-    if (!nameInput) {
-      alert("Please enter your name 💗");
-      return;
-    }
-
+    if (!nameInput) { alert("Please tell us who you are first... 💗"); return; }
     if (passwordInput === "sir mc cute") {
       localStorage.setItem("unlocked", "true");
       localStorage.setItem("username", nameInput);
       unlockPage(nameInput);
-    } else {
-      alert("Wrong password! Try again 😢");
-    }
+    } else { alert("That's not the secret key... 😢"); }
   }
 
-function unlockPage(name) {
-  document.getElementById("loginBox").style.display = "none";
+  function unlockPage(name) {
+    document.getElementById("loginBox").style.display = "none";
+    const welcome = document.getElementById("welcomeMsg");
+    document.getElementById("welcomeText").textContent = `Welcome back, ${name} 💖`;
+    welcome.style.display = "flex";
 
-  const welcome = document.getElementById("welcomeMsg");
-  welcome.textContent = `Welcome, ${name}! 💖`;
-  welcome.style.display = "flex";
+    setTimeout(() => {
+      welcome.style.display = "none";
+      document.getElementById("gallery").style.display = "flex";
+      document.getElementById("meetBtn").style.display = "inline-block";
+      document.getElementById("logoutBtn").style.display = "inline-block";
+      document.getElementById("footerQuote").style.display = "block";
+      const bg = document.getElementById("bgMusic");
+      if (bg) bg.play().catch(() => {});
+    }, 2200);
 
-  setTimeout(() => {
-    welcome.style.display = "none";
-
-    document.getElementById("gallery").style.display = "flex";
-    document.getElementById("meetBtn").style.display = "inline-block";
-    document.getElementById("logoutBtn").style.display = "inline-block";
-    const bg = document.getElementById("bgMusic");
-    if (bg) bg.play().catch(() => {});
-  }, 1800);
-  const userRef = db.ref("onlineUsers/" + name);
-
-userRef.set({
-  name: name,
-  joined: Date.now()
-});
-
-// Auto remove when tab closes
-userRef.onDisconnect().remove();
-
-}
-
-
-  function goToClassmates() {
-    window.location.href = "ict.html";
+    const userRef = db.ref("onlineUsers/" + name);
+    userRef.set({ name: name, joined: Date.now() });
+    userRef.onDisconnect().remove();
   }
-  
-function logout() {
-  localStorage.removeItem("unlocked");
-  localStorage.removeItem("username");
-  location.reload();
-}
 
+  function goToClassmates() { window.location.href = "ict.html"; }
+  function logout() { localStorage.removeItem("unlocked"); localStorage.removeItem("username"); location.reload(); }
 </script>
-
-
 </body>
 </html>

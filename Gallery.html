@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Memories - Animated Gallery</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    overflow-x: hidden;
+  }
+
+  .header {
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), #111), 
+                url('https://via.placeholder.com/1920x1080/333/666?text=School+Gate') no-repeat center center;
+    background-size: cover;
+  }
+
+  .collage-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    padding: 50px 10%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .polaroid {
+    background-color: white;
+    padding: 12px 12px 35px 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+
+  .polaroid.reveal {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--r));
+  }
+
+  .polaroid:hover {
+    transform: scale(1.08) rotate(0deg) !important;
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .polaroid img {
+    display: block;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background-color: #eee;
+  }
+
+  .footer-text {
+    padding: 100px 10%;
+    text-align: center;
+  }
+
+  .grade-text { font-size: 24px; opacity: 0.8; }
+  .end-text {
+    font-size: clamp(60px, 15vw, 180px);
+    font-weight: 900;
+    line-height: 0.8;
+  }
+
+  .r-left { --r: -3deg; }
+  .r-right { --r: 3deg; }
+  .r-mid { --r: -1.5deg; }
+
+  /* Phone responsive */
+  @media (max-width: 600px) {
+    .collage-container { padding: 30px 5%; gap: 20px; }
+    .polaroid { padding: 8px 8px 25px 8px; }
+    .polaroid img { height: 180px; }
+    .polaroid.reveal { transform: translateY(0) scale(1) rotate(0deg); }
+    .header h1 { font-size: 2rem; }
+    .grade-text { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="grade-text">Grade 12, St. Dominic</div>
+  <h1 style="font-size: 3rem;">OUR JOURNEY</h1>
+  <p>Scroll down to relive the memories</p>
+</div>
+
+<div class="collage-container" id="gallery">
+  <div class="polaroid r-left">
+    <img src="ooo.jpg" alt="Memory 1">
+  </div>
+  <div class="polaroid r-right">
+    <img src="oo.jpg" alt="Memory 2">
+  </div>
+  <div class="polaroid r-mid">
+    <img src="yow.jpg" alt="Memory 3">
+  </div>
+  <div class="polaroid r-left">
+    <img src="https://via.placeholder.com/400/444/fff?text=New+Memory+4" alt="Memory 4">
+  </div>
+  <div class="polaroid r-right">
+    <img src="https://via.placeholder.com/400/555/fff?text=New+Memory+5" alt="Memory 5">
+  </div>
+  <div class="polaroid r-mid">
+    <img src="https://via.placeholder.com/400/666/fff?text=New+Memory+6" alt="Memory 6">
+  </div>
+  <div class="polaroid r-left">
+    <img src="https://via.placeholder.com/400/777/fff?text=New+Memory+7" alt="Memory 7">
+  </div>
+  <div class="polaroid r-right">
+    <img src="https://via.placeholder.com/400/888/fff?text=New+Memory+8" alt="Memory 8">
+  </div>
+</div>
+
+<div class="footer-text">
+  <div class="end-text">THE END</div>
+  <p>Class of 2024</p>
+</div>
+
+<script>
+  const observerOptions = {
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.polaroid').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

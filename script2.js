@@ -1,84 +1,55 @@
-const sections = document.querySelectorAll('.section');
+const sections = document.querySelectorAll(".section");
+const videos = document.querySelectorAll("video");
 
-sections.forEach(section => {
+let current = 0;
+let isAnimating = false;
 
-  // Auto-hide text after 3 seconds (when section becomes active)
-  setTimeout(() => {
-    section.classList.add('hide-text');
-  }, 3000);
-
-  // Tap / click to toggle text
-  section.addEventListener('click', () => {
-    section.classList.toggle('hide-text');
-  });
-
+/* INITIAL POSITION */
+sections.forEach((section, i) => {
+  section.style.transform = `translateY(${i * 100}vh)`;
 });
 
-const videos = document.querySelectorAll(".bg-video");
-const audioPrompt = document.getElementById("audioPrompt");
-
-let currentIndex = 0;
-let isScrolling = false;
-let audioEnabled = false;
-
-/* INITIAL STATE */
-sections[0].classList.add("active");
-updateVideos();
-
-/* SECTION NAVIGATION */
+/* SMOOTH SECTION MOVE */
 function goToSection(index) {
-  if (index < 0 || index >= sections.length || isScrolling) return;
+  isAnimating = true;
 
-  isScrolling = true;
-
-  sections[currentIndex].classList.remove("active");
-  currentIndex = index;
-  sections[currentIndex].classList.add("active");
-
-  updateVideos();
+  sections.forEach((section, i) => {
+    section.style.transform = `translateY(${(i - index) * 100}vh)`;
+  });
 
   setTimeout(() => {
-    isScrolling = false;
-  }, 900);
+    isAnimating = false;
+  }, 1000);
 }
 
-/* MOUSE WHEEL */
-window.addEventListener("wheel", e => {
-  if (e.deltaY > 0) {
-    goToSection(currentIndex + 1);
-  } else {
-    goToSection(currentIndex - 1);
-  }
-});
+/* WHEEL CONTROL */
+window.addEventListener("wheel", (e) => {
+  if (isAnimating) return;
 
-/* KEYBOARD */
-window.addEventListener("keydown", e => {
-  if (e.key === "ArrowDown") goToSection(currentIndex + 1);
-  if (e.key === "ArrowUp") goToSection(currentIndex - 1);
-});
+  if (e.deltaY > 0 && current < sections.length - 1) {
+    current++;
+    goToSection(current);
+  }
+
+  if (e.deltaY < 0 && current > 0) {
+    current--;
+    goToSection(current);
+  }
+}, { passive: true });
 
 /* AUDIO PROMPT */
-document.getElementById("yesAudio").onclick = () => {
-  audioEnabled = true;
-  audioPrompt.style.display = "none";
-  updateVideos();
+const audioPrompt = document.getElementById("audioPrompt");
+const yesAudio = document.getElementById("yesAudio");
+const noAudio = document.getElementById("noAudio");
+
+yesAudio.onclick = () => {
+  videos.forEach(v => v.muted = false);
+  closePrompt();
 };
 
-document.getElementById("noAudio").onclick = () => {
-  audioEnabled = false;
-  audioPrompt.style.display = "none";
-};
+noAudio.onclick = closePrompt;
 
-/* VIDEO CONTROL */
-function updateVideos() {
-  videos.forEach((video, index) => {
-    if (index === currentIndex) {
-      video.muted = !audioEnabled;
-      video.currentTime = 0;
-      video.play();
-    } else {
-      video.pause();
-      video.muted = true;
-    }
-  });
+function closePrompt() {
+  audioPrompt.style.opacity = "0";
+  setTimeout(() => audioPrompt.remove(), 600);
 }
